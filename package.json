@@ -1,0 +1,23 @@
+{
+  "name": "websocket-bubble-game",
+  "version": "1.0.0",
+  "description": "A simple WebSocket-based bubble game with user profile pictures and interactive elements.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "express": "^5.0.0",
+    "ws": "^8.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}
