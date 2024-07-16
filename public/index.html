@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Bubble Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Latar belakang hitam */
+            overflow: hidden; /* Menghindari scroll bar */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff; /* Warna teks putih */
+            font-family: Arial, sans-serif;
+        }
+
+        .content {
+            text-align: center;
+            z-index: 1; /* Konten berada di atas bubble */
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            pointer-events: none; /* Mencegah interaksi dengan bubble */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: transform 0.3s ease-out;
+        }
+
+        .bubble img {
+            width: 100%;
+            height: auto;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(50px, -50px);
+            }
+            50% {
+                transform: translate(-50px, 50px);
+            }
+            75% {
+                transform: translate(-50px, -50px);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Tombol Pengaturan */
+        .settings-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #ff6f61;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000; /* Tombol pengaturan berada di atas semua elemen */
+        }
+
+        .settings-btn:hover {
+            background-color: #e55c54;
+        }
+
+        /* Panel Pengaturan */
+        .settings-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 250px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000; /* Panel pengaturan berada di atas semua elemen */
+        }
+
+        .settings-panel.show {
+            display: flex;
+        }
+
+        .bg-option {
+            display: flex;
+            gap: 10px;
+        }
+
+        .bg-option img {
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .bg-option img:hover {
+            border: 2px solid #ff6f61; /* Garis border saat hover */
+        }
+
+        .show {
+            display: flex;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>WebSocket Bubble Game</h1>
+        <p>This page features interactive bubbles with user profile pictures.</p>
+    </div>
+
+    <button class="settings-btn">⚙️ Settings</button>
+
+    <div class="settings-panel" id="settingsPanel">
+        <div class="form-group">
+            <label for="targetUsername">Username:
+                <input id="targetUsername" type="text" placeholder="@username" style="width:140px;"/>
+            </label>
+        </div>
+        <button id="btnPrepare">CHECK SIGNAL</button>
+        <button id="targetConnect">CONNECT</button>
+        <label for="backgroundImage">Background Image:</label>
+        <select id="backgroundImage">
+            <option value="">Select Background</option>
+            <option value="https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Background+1">Background 1</option>
+            <option value="https://via.placeholder.com/1920x1080/111111/FFFFFF?text=Background+2">Background 2</option>
+            <option value="https://via.placeholder.com/1920x1080/222222/FFFFFF?text=Background+3">Background 3</option>
+        </select>
+        <div id="bgOptions">
+            <div class="bg-option">
+                <img src="https://via.placeholder.com/50x50/000000/FFFFFF?text=1" alt="Background 1" data-bg="https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Background+1">
+                <img src="https://via.placeholder.com/50x50/111111/FFFFFF?text=2" alt="Background 2" data-bg="https://via.placeholder.com/1920x1080/111111/FFFFFF?text=Background+2">
+                <img src="https://via.placeholder.com/50x50/222222/FFFFFF?text=3" alt="Background 3" data-bg="https://via.placeholder.com/1920x1080/222222/FFFFFF?text=Background+3">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to generate random numbers
+        function getRandomNumber(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Function to create a bubble with user profile picture
+        function createBubble(userId, userAvatar, giftAmount) {
+            let bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.dataset.userId = userId;
+            bubble.dataset.giftAmount = giftAmount;
+
+            const bubbleSize = 30 + (giftAmount * 10); // Ukuran bubble berdasarkan jumlah gift
+            bubble.style.width = bubbleSize + 'px';
+            bubble.style.height = bubbleSize + 'px';
+            bubble.style.left = getRandomNumber(0, window.innerWidth - bubbleSize) + 'px';
+            bubble.style.top = getRandomNumber(0, window.innerHeight - bubbleSize) + 'px';
+            bubble.style.background = document.getElementById('bubbleColor').value || 'rgba(255, 255, 255, 0.7)'; // Warna bubble
+
+            let img = document.createElement('img');
+            img.src = userAvatar || 'https://via.placeholder.com/50/000000/FFFFFF?text=Avatar'; // Gambar default
+            img.alt = 'User Avatar';
+            bubble.appendChild(img);
+
+            document.body.appendChild(bubble);
+
+            // Animasi bubble
+            animateBubble(bubble);
+        }
+
+        // Function to animate bubbles
+        function animateBubble(bubble) {
+            const duration = parseFloat(document.getElementById('animationDuration').value) || 5; // Durasi gerakan bubble
+            const delay = getRandomNumber(0, 5);
+            const fadeOutTime = parseFloat(document.getElementById('fadeOutTime').value) || 2; // Durasi memudar bubble
+
+            bubble.style.animation = `move ${duration}s linear forwards, fadeOut ${fadeOutTime}s ${duration - fadeOutTime}s linear forwards`;
+        }
+
+        // Event Listener untuk Background Image
+        document.getElementById('backgroundImage').addEventListener('change', (event) => {
+            document.body.style.backgroundImage = `url(${event.target.value})`;
+        });
+
+        // Event Listener untuk Background Image (Klik Gambar)
+        document.getElementById('bgOptions').addEventListener('click', (event) => {
+            if (event.target.tagName === 'IMG') {
+                const bgUrl = event.target.dataset.bg;
+                document.body.style.backgroundImage = `url(${bgUrl})`;
+                document.getElementById('backgroundImage').value = bgUrl;
+            }
+        });
+
+        // Event Listener untuk Tombol CONNECT
+        document.getElementById('targetConnect').addEventListener('click', () => {
+            const username = document.getElementById('targetUsername').value;
+            if (username) {
+                const ws = new WebSocket('wss://example.com/socket'); // Ganti dengan URL WebSocket yang sesuai
+                ws.onopen = () => {
+                    console.log('WebSocket connected');
+                    ws.send(JSON.stringify({ type: 'join', username: username }));
+                };
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'gift') {
+                        createBubble(data.userId, data.userAvatar, data.giftAmount);
+                    }
+                };
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+                ws.onclose = () => {
+                    console.log('WebSocket disconnected');
+                };
+            } else {
+                alert('Please enter a username.');
+            }
+        });
+
+        // Event Listener untuk Tombol CHECK SIGNAL
+        document.getElementById('btnPrepare').addEventListener('click', () => {
+            alert('Checking signal...');
+        });
+
+        // Tombol pengaturan
+        document.querySelector('.settings-btn').addEventListener('click', () => {
+            document.getElementById('settingsPanel').classList.toggle('show');
+        });
+    </script>
+</body>
+</html>
