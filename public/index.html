@@ -221,7 +221,7 @@
         document.getElementById('targetConnect').addEventListener('click', () => {
             const username = document.getElementById('targetUsername').value;
             if (username) {
-                const ws = new WebSocket('wss://example.com/socket'); // Ganti dengan URL WebSocket yang sesuai
+                const ws = new WebSocket('ws://localhost:3000'); // Ganti dengan URL WebSocket yang sesuai
                 ws.onopen = () => {
                     console.log('WebSocket connected');
                     ws.send(JSON.stringify({ type: 'join', username: username }));
