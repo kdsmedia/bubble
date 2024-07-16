@@ -74,16 +74,16 @@
             bottom: 20px;
             right: 20px;
             padding: 15px 25px;
-            background-color: #ff6f61;
+            background-color: #000;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             z-index: 1000; /* Tombol pengaturan berada di atas semua elemen */
         }
 
         .settings-btn:hover {
-            background-color: #e55c54;
+            background-color: #000;
         }
 
         /* Panel Pengaturan */
@@ -131,11 +131,11 @@
 </head>
 <body>
     <div class="content">
-        <h1>WebSocket Bubble Game</h1>
-        <p>This page features interactive bubbles with user profile pictures.</p>
+        <h1></h1>
+        <p></p>
     </div>
 
-    <button class="settings-btn">⚙️ Settings</button>
+    <button class="settings-btn">⚙️</button>
 
     <div class="settings-panel" id="settingsPanel">
         <div class="form-group">
@@ -148,15 +148,17 @@
         <label for="backgroundImage">Background Image:</label>
         <select id="backgroundImage">
             <option value="">Select Background</option>
-            <option value="https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Background+1">Background 1</option>
-            <option value="https://via.placeholder.com/1920x1080/111111/FFFFFF?text=Background+2">Background 2</option>
-            <option value="https://via.placeholder.com/1920x1080/222222/FFFFFF?text=Background+3">Background 3</option>
+            <option value="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimIKtUjAH3Mt1ObKs4ntTSz5t6QMIX2BFAtW1JxCxOm6eKYfaKaGeGHu0Zno-PDThLy8NvQ4jmZC3mdeA72KldPOmwGiTPv2NZHcaBM_k66CsEuYR7pWi9r4Las7D03Vwe5rMeLknuRCQLM4-AZaGjVsJgmnr4Uv1OP4Tx34X_JgMjmGOx7_4rxOIVEYA/s1635/4k%20nature.jpg">Background 1</option>
+            <option value="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEigHSn1l1gnThnRZFRP6agOKCmsFsXWmfsf5shv2Gjv2TuYS4Fv6-PO0cx9elprxnbLK7Kl_euDA22Nsrk4WuCLtSGUXl1ejtUOsnENaRACFhJ-EoNwh43afr5oCSBgy_HJ1DTFKr4Z6vEhQmk_PRuhipeoJICmA0UnWzPeGIOPyiPRGjqeGH6PAXzGS6w/s1594/1eb54b9a-32c1-43ff-aaf6-870930c562ad.jpg">Background 2</option>
+            <option value="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaRLb0NRhKCZ2flmdhIMcmDJTuyl5HrCLrKjvX8YRpLJCdM5-EFPDPrbX8NifLdgCyqij4d0hELvkak_0RvXzha-eZO2aaBI5oWmiBmYuBkXFGjiEiZmDIAQzSxLUHyIAfFg5btpjABbp6FojaHzUoP4gEDm0BZz7uigwMnI0AvW9Qp9LnEFuDqx-IsEU/s1472/Twilight.jpg">Background 3</option>
+            <option value="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgofZ7p8Tjl38nrKAzhTHuoa6J-3sYQuWXXMoS2w-aQKLsGBgfntGYTu4_g77RcjScnq08RnDW4_BIFn8jwQ_6uMSznJdUb8rX9tDVe9sjlGZkvz5jiUR4yby_S6lJyVoc-hJkw9a7EukzHBkN5iO7d5HxrjJwwSGCVEw9uoYWd-B9NgIDcYX9dZ_VS_BU/s1595/Island%20by%20Smart%20Wallpapers%20Art%20on%20Telegram_.jpg">Background 4</option>
         </select>
         <div id="bgOptions">
             <div class="bg-option">
-                <img src="https://via.placeholder.com/50x50/000000/FFFFFF?text=1" alt="Background 1" data-bg="https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Background+1">
-                <img src="https://via.placeholder.com/50x50/111111/FFFFFF?text=2" alt="Background 2" data-bg="https://via.placeholder.com/1920x1080/111111/FFFFFF?text=Background+2">
-                <img src="https://via.placeholder.com/50x50/222222/FFFFFF?text=3" alt="Background 3" data-bg="https://via.placeholder.com/1920x1080/222222/FFFFFF?text=Background+3">
+                <img src="https://via.placeholder.com/50x50/000000/FFFFFF?text=1" alt="Background 1" data-bg="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimIKtUjAH3Mt1ObKs4ntTSz5t6QMIX2BFAtW1JxCxOm6eKYfaKaGeGHu0Zno-PDThLy8NvQ4jmZC3mdeA72KldPOmwGiTPv2NZHcaBM_k66CsEuYR7pWi9r4Las7D03Vwe5rMeLknuRCQLM4-AZaGjVsJgmnr4Uv1OP4Tx34X_JgMjmGOx7_4rxOIVEYA/s1635/4k%20nature.jpg">
+                <img src="https://via.placeholder.com/50x50/111111/FFFFFF?text=2" alt="Background 2" data-bg="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEigHSn1l1gnThnRZFRP6agOKCmsFsXWmfsf5shv2Gjv2TuYS4Fv6-PO0cx9elprxnbLK7Kl_euDA22Nsrk4WuCLtSGUXl1ejtUOsnENaRACFhJ-EoNwh43afr5oCSBgy_HJ1DTFKr4Z6vEhQmk_PRuhipeoJICmA0UnWzPeGIOPyiPRGjqeGH6PAXzGS6w/s1594/1eb54b9a-32c1-43ff-aaf6-870930c562ad.jpg">
+                <img src="https://via.placeholder.com/50x50/222222/FFFFFF?text=3" alt="Background 3" data-bg="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaRLb0NRhKCZ2flmdhIMcmDJTuyl5HrCLrKjvX8YRpLJCdM5-EFPDPrbX8NifLdgCyqij4d0hELvkak_0RvXzha-eZO2aaBI5oWmiBmYuBkXFGjiEiZmDIAQzSxLUHyIAfFg5btpjABbp6FojaHzUoP4gEDm0BZz7uigwMnI0AvW9Qp9LnEFuDqx-IsEU/s1472/Twilight.jpg">
+                <img src="https://via.placeholder.com/50x50/222222/FFFFFF?text=4" alt="Background 3" data-bg="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgofZ7p8Tjl38nrKAzhTHuoa6J-3sYQuWXXMoS2w-aQKLsGBgfntGYTu4_g77RcjScnq08RnDW4_BIFn8jwQ_6uMSznJdUb8rX9tDVe9sjlGZkvz5jiUR4yby_S6lJyVoc-hJkw9a7EukzHBkN5iO7d5HxrjJwwSGCVEw9uoYWd-B9NgIDcYX9dZ_VS_BU/s1595/Island%20by%20Smart%20Wallpapers%20Art%20on%20Telegram_.jpg">
             </div>
         </div>
     </div>
